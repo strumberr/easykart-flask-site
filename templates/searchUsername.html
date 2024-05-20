@@ -34,16 +34,34 @@
                 <div class="grid-container">
                     {% for username in stats_username %}
                         {% if loop.index0 % 3 == 2 %}
-                            <a class="grid-item right-element" href="/user?username={{ username }}">
-                                <div>{{ username }}</div>
+                            <a class="grid-item right-element" href="/user?username={{ username[0] }}">
+                                <div>{{ username[0] }}
+                                    {% if username[1] %}
+                                        <!-- <span class="not-verified">not verified</span> -->
+                                    {% else %}
+                                        <span class="verified">(verified)</span>
+                                    {% endif %}
+                                </div>
                             </a>
                         {% elif loop.index0 % 3 == 1 %}
-                            <a class="grid-item middle-element" href="/user?username={{ username }}">
-                                <div>{{ username }}</div>
+                            <a class="grid-item middle-element" href="/user?username={{ username[0] }}">
+                                <div>{{ username[0] }}
+                                    {% if username[1] %}
+                                        <!-- <span class="not-verified">not verified</span> -->
+                                    {% else %}
+                                        <span class="verified">(verified)</span>
+                                    {% endif %}
+                                </div>
                             </a>
                         {% else %}
-                            <a class="grid-item left-element" href="/user?username={{ username }}">
-                                <div>{{ username }}</div>
+                            <a class="grid-item left-element" href="/user?username={{ username[0] }}">
+                                <div>{{ username[0] }}
+                                    {% if username[1] %}
+                                        <!-- <span class="not-verified">not verified</span> -->
+                                    {% else %}
+                                        <span class="verified">(verified)</span>
+                                    {% endif %}
+                                </div>
                             </a>
                         {% endif %}
                     {% endfor %}
