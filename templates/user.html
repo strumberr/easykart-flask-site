@@ -30,7 +30,7 @@
         <div class="middleSection" >
             <div class="middleSectionUsername">{{ username }}</div>
             <div class="middleSectionRank">
-                <div class="middleSectionRankLabel">
+                <div id="rankField" class="middleSectionRankLabel">
                     Rank
                 </div>
             </div>
@@ -42,6 +42,10 @@
     </div>
 
     <script>
+
+
+
+
         // load variable stats_username into data
         let data = '{{ stats_username|tojson }}';
 
@@ -51,12 +55,21 @@
         console.log(data);
 
         function renderChart(data) {
+
+            const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
             const ctx = document.getElementById('scoreChart').getContext('2d');
-            const labels = data.map(entry => {
+            const labels = sortedData.map(entry => {
                 const date = new Date(entry.date);
                 return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
             }).reverse();
-            const scores = data.map(entry => entry.score).reverse();
+            const scores = sortedData.map(entry => entry.score).reverse();
+            const minScore = Math.min(...scores);
+            const maxScore = Math.max(...scores);
+            const zoomFactor = 0.5; // Adjust this value to change the zoom level
+            const yMin = minScore - (maxScore - minScore) * zoomFactor;
+            const yMax = maxScore + (maxScore - minScore) * zoomFactor;
+
 
             new Chart(ctx, {
                 type: 'line',
@@ -78,7 +91,10 @@
                 options: {
                     scales: {
                         y: {
-                            beginAtZero: true,
+                            startAtZero: true,
+
+                            max: yMax,
+
                             scaleLabel: {
                                 display: true,
                                 labelString: 'Scores'
@@ -111,7 +127,8 @@
                                     return label;
                                 }
                             }
-                        }
+                        },
+                        
                     }
                 }
             });
@@ -120,11 +137,34 @@
 
         function showContent(category, element) {
             // Filter the data based on the selected category
-            const filteredData = data.filter(item => item.category === category);
+            const filteredData = data.all_records[category];
+
+            // if there is no data for the selected category, return
+            if (filteredData.length === 0) {
+                return;
+            }
+
+            // console.log(filteredData);
 
             // Find the best score
-            const bestScore = Math.min(...filteredData.map(item => item.score));
-            const bestEntry = filteredData.find(item => item.score === bestScore);
+            // get the record that contains the best score
+            const bestEntry = filteredData.reduce((acc, curr) => curr.score > acc.score ? curr : acc, { score: -Infinity });
+
+            // get the best score
+            const bestScore = bestEntry.score;
+            const bestPosition = bestEntry.position;
+            const player_top_percentage = bestEntry.player_top_percentage;
+            const total_drivers = bestEntry.total_drivers;
+            const rank = bestEntry.label;
+            const participant = bestEntry.participant;
+            const date = bestEntry.date;
+            const day_of_week = bestEntry.day_of_week;
+            const seconds_to_beat_first = bestEntry.seconds_to_beat_first;
+
+
+            // Update the rankField with the rank
+            document.getElementById('rankField').innerHTML = rank;
+            
 
             // Generate HTML content based on the filtered data
             const contentHtml = `
@@ -135,7 +175,7 @@
                                 <img class="statsIcons" src="{{ url_for('static', filename='assets/Group 3fdsfsdfsdfd.svg') }}" alt="icon">
                                 <div class="statsWrapper">
                                     <div class="elementStatsThing" style="font-size: 24px;">${bestEntry.position}</div>
-                                    <div class="elementStatsThing" style="font-size: 18px; color: #696969; align-items: flex-start">out of 802</div>
+                                    <div class="elementStatsThing" style="font-size: 18px; color: #696969; align-items: flex-start">out of ${total_drivers}</div>
                                 </div>
                             </div>
                         </div>
@@ -152,20 +192,38 @@
                             <div style="display: flex; flex-direction: row;">
                                 <img class="statsIcons" src="{{ url_for('static', filename='assets/Group 5sdfsdfsdf.svg') }}" alt="icon">
                                 <div class="statsWrapper">
-                                    <div class="elementStatsThing" style="font-size: 24px;">72</div>
-                                    <div class="elementStatsThing" style="font-size: 18px; color: #696969; align-items: flex-start">out of 802</div>
+                                    <div class="elementStatsThing" style="font-size: 24px;">${player_top_percentage}%</div>
+                                    <div class="elementStatsThing" style="font-size: 18px; color: #696969; align-items: flex-start">top % out of all</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="userInfoLeftLongDes"></div>
+
+                    <div class="userInfoLeftLongDes">
+                        <div class="titleText">
+                            Gap to lead (in seconds)
+                        </div>
+                        <div class="subtitleText">
+                            ${participant} has to be ${seconds_to_beat_first} seconds faster to beat the current first place driver.
+                        </div>
+                            
+                    </div>
                 </div>
                 <div class="userInfoRight">
                     <div class="smallTitle">Fastest laps trend</div>
                     <div class="graphWrapper">
                         <canvas id="scoreChart" class="scoreChart"></canvas>
                     </div>
-                    <div class="userInfoLeftLongDes"></div>
+
+                    <div class="userInfoLeftLongDes">
+                        <div class="titleText">
+                            Last updated
+                        </div>
+
+                        <div class="subtitleText">
+                            ${participant} accomplished their fastest lap on ${day_of_week}, ${date}.
+                        </div>
+                    </div>
                 </div>
             `;
 
@@ -183,15 +241,21 @@
             renderChart(filteredData);
         }
 
+
         // initially loop through the data and show the first category that is available
         const categories = ['kids', 'normal', 'adults'];
 
-        for (let category of categories) {
-            const filteredData = data.filter(item => item.category === category);
+        
+        console.log(data.all_records);
 
-            console.log(filteredData);
+        for (let category of categories) {
+
+            const filteredData = data.all_records[category];
+
+            console.log('filteredData', filteredData);
 
             if (filteredData.length !== 0) {
+
                 console.log('showing', category);
 
                 showContent(category, document.querySelector(`.itemCategory[onclick="showContent('${category}', this)"]`));
