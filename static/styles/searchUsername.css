@@ -130,3 +130,19 @@ body {
     font-size: 30px;
     font-weight: 500;
 }
+
+/* remove underscores from all links */
+a {
+    text-decoration: none;
+}
+
+.verified {
+    color: green;
+    font-size: 16px;
+
+}
+
+.not-verified {
+    color: red;
+    font-size: 16px;
+}
