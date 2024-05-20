@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    background-color: #161616;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: -8px;
+}
+
+
+
+.bodyInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 90%;
+    max-width: 1200px;
+    margin-bottom: 20px;
+}
+
+.topSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    margin-bottom: 20px;
+}
+
+.middleSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    margin-bottom: 20px;
+}
+
+.bottomSection {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 80%;
+    margin-bottom: 20px;
+    flex-direction: row;
+}
+
+.navigatorCategories {
+    width: 60%;
+    height: 80%;
+    background-color: #1F1F1F;
+    border-radius: 200px;
+    padding: 8px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.itemCategory {
+    width: 33%;
+    height: 100%;
+    /* background-color: #DFDFDF; */
+    border-radius: 100px;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+
+.itemCategory:hover {
+    background-color: #333333;
+}
+
+.itemCategory.active {
+    background-color: #DFDFDF;
+    color: #000000; /* Adjust text color for better visibility */
+}
+
+.dataItem {
+    color: white;
+}
+
+.middleSectionUsername {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    margin-bottom: 20px;
+
+    font-family: 'Poppins', sans-serif;
+    color: #FFFFFF;
+    font-size: 56px;
+    font-weight: 200;
+}
+
+.middleSectionRank {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 50%;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+.middleSectionRankLabel {
+    font-family: 'Poppins', sans-serif;
+    background-color: #FFB800;
+    width: 150px;
+    height: 60px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+}
+
+.userInfoLeft {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    padding-top: 20px;
+}
+
+.userInfoRight {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+}
+
+.userInfoLeftStats {
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    width: 100%;
+}
+
+.userInfoLeftLongDes {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 20%;
+}
+
+.statsElement {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 33%;
+}
+
+.statsIcons {
+    width: 6vw;
+    height: 10vh;
+}
+
+.statsWrapper {
+    margin-left: 20px;
+}
+
+.elementStatsThing {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    width: 100%;
+    height: 50%;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.graphWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    background-color: #1F1F1F;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.smallTitle {
+    font-family: 'Poppins', sans-serif;
+    color: #DFDFDF;
+    font-size: 22px;
+    font-weight: 300;
+    margin-bottom: 10px;
+    /* height: 20%; */
+}
+
+.scoreChart {
+    width: auto;
+    height: 80%;
+}

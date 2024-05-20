@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Import CSS file in Flask -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/searchUsername.css') }}">
+    <title>Search Usernames</title>
+</head>
+<body>
+
+    <!-- If stats_username is None -->
+    {% if not stats_username %}
+
+        <form class="searchWrapper" action="/search" method="get">
+            <input class="searchField" type="text" name="username" placeholder="Search for drivers...">
+            <button class="searchFieldButton" type="submit">Search</button>
+        </form>
+
+    {% else %}
+        <div class="bodyInner">
+            <div class="topSection">
+                <form class="searchWrapper" action="/search" method="get">
+                    <input class="searchField" type="text" name="username" placeholder="Search for drivers...">
+                    <button class="searchFieldButton" type="submit">Search</button>
+                </form>
+            </div>
+
+            <div class="middleSection">
+                <div class="titleSearch">Results for: {{ username }}</div>
+            </div>
+
+            <div class="bottomSection">
+                <div class="grid-container">
+                    {% for username in stats_username %}
+                        {% if loop.index0 % 3 == 2 %}
+                            <a class="grid-item right-element" href="/user?username={{ username }}">
+                                <div>{{ username }}</div>
+                            </a>
+                        {% elif loop.index0 % 3 == 1 %}
+                            <a class="grid-item middle-element" href="/user?username={{ username }}">
+                                <div>{{ username }}</div>
+                            </a>
+                        {% else %}
+                            <a class="grid-item left-element" href="/user?username={{ username }}">
+                                <div>{{ username }}</div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+    {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+    background-color: #161616;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: -8px;
+}
+
+.searchWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    flex-wrap: nowrap;
+}
+
+.searchField {
+    width: 80%;
+    height: 50px;
+    border: none;
+    border-radius: 500px;
+    padding: 10px;
+    padding-left: 40px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #1F1F1F;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    margin-right: 5px;
+}
+
+.searchField::placeholder {
+    color: #555555;
+}
+
+.searchFieldButton {
+    width: 150px;
+    height: 70px;
+    border: none;
+    border-radius: 500px;
+    padding: 10px;
+    font-size: 16px;
+    color: #161616;
+    background-color: #DFDFDF;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.grid-container {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    justify-content: space-between;
+}
+
+.grid-item {
+    /* padding: 20px; */
+
+    text-align: center;
+    border-radius: 10px;
+    font-size: 34px;
+    color: #7D7D7D;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    /* min-width: 200px; */
+}
+
+.left-element {
+    justify-self: start;
+}
+
+.middle-element {
+    justify-self: center;
+}
+
+.right-element {
+    justify-self: end;
+}
+
+.bodyInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 80%;
+    max-width: 1200px;
+    margin-bottom: 20px;
+}
+
+.topSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 15%;
+    margin-bottom: 20px;
+}
+
+.middleSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 15%;
+    margin-bottom: 20px;
+}
+
+.bottomSection {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 70%;
+    margin-bottom: 20px;
+}
+
+.titleSearch {
+    width: 80%;
+    font-family: 'Poppins', sans-serif;
+    color: #FFFFFF;
+    font-size: 30px;
+    font-weight: 500;
+}

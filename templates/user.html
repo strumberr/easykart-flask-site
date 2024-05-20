@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racing Stats</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/user.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0"></script>
+
+</head>
+
+<body>
+    <div class="bodyInner">
+        <div class="topSection">
+            <div class="navigatorCategories">
+                <div class="itemCategory" onclick="showContent('kids', this)">
+                    Kids
+                </div>
+                <div class="itemCategory" onclick="showContent('normal', this)">
+                    Normal
+                </div>
+                <div class="itemCategory" onclick="showContent('adults', this)">
+                    Adults
+                </div>
+            </div>
+        </div>
+
+        <div class="middleSection" >
+            <div class="middleSectionUsername">{{ username }}</div>
+            <div class="middleSectionRank">
+                <div class="middleSectionRankLabel">
+                    Rank
+                </div>
+            </div>
+        </div>
+
+        <div class="bottomSection" id="bottomSection">
+
+        </div>
+    </div>
+
+    <script>
+        // load variable stats_username into data
+        let data = '{{ stats_username|tojson }}';
+
+        // Parse the JSON string into an array
+        data = JSON.parse(data);
+
+        console.log(data);
+
+        function renderChart(data) {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            const labels = data.map(entry => {
+                const date = new Date(entry.date);
+                return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(date);
+            }).reverse();
+            const scores = data.map(entry => entry.score).reverse();
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Scores',
+                        data: scores,
+                        fill: true,
+                        backgroundColor: 'rgba(151, 187, 205, 0.5)',
+                        borderColor: 'rgba(151, 187, 205, 1)',
+                        pointBackgroundColor: 'rgba(151, 187, 205, 1)',
+                        pointBorderColor: '#fff',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Scores'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutBounce'
+                    },
+                    elements: {
+                        line: {
+                            tension: 0.4
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'decimal' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function showContent(category, element) {
+            // Filter the data based on the selected category
+            const filteredData = data.filter(item => item.category === category);
+
+            // Find the best score
+            const bestScore = Math.min(...filteredData.map(item => item.score));
+            const bestEntry = filteredData.find(item => item.score === bestScore);
+
+            // Generate HTML content based on the filtered data
+            const contentHtml = `
+                <div class="userInfoLeft">
+                    <div class="userInfoLeftStats">
+                        <div class="statsElement">
+                            <div style="display: flex; flex-direction: row;">
+                                <img class="statsIcons" src="{{ url_for('static', filename='assets/Group 3fdsfsdfsdfd.svg') }}" alt="icon">
+                                <div class="statsWrapper">
+                                    <div class="elementStatsThing" style="font-size: 24px;">${bestEntry.position}</div>
+                                    <div class="elementStatsThing" style="font-size: 18px; color: #696969; align-items: flex-start">out of 802</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="statsElement">
+                            <div style="display: flex; flex-direction: row;">
+                                <img class="statsIcons" src="{{ url_for('static', filename='assets/Group 4sefwff.svg') }}" alt="icon">
+                                <div class="statsWrapper">
+                                    <div class="elementStatsThing" style="font-size: 24px;">${bestScore}</div>
+                                    <div class="elementStatsThing" style="font-size: 18px; color: #696969; align-items: flex-start">Best Score</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="statsElement">
+                            <div style="display: flex; flex-direction: row;">
+                                <img class="statsIcons" src="{{ url_for('static', filename='assets/Group 5sdfsdfsdf.svg') }}" alt="icon">
+                                <div class="statsWrapper">
+                                    <div class="elementStatsThing" style="font-size: 24px;">72</div>
+                                    <div class="elementStatsThing" style="font-size: 18px; color: #696969; align-items: flex-start">out of 802</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="userInfoLeftLongDes"></div>
+                </div>
+                <div class="userInfoRight">
+                    <div class="smallTitle">Fastest laps trend</div>
+                    <div class="graphWrapper">
+                        <canvas id="scoreChart" class="scoreChart"></canvas>
+                    </div>
+                    <div class="userInfoLeftLongDes"></div>
+                </div>
+            `;
+
+            // Update the content in the bottomSection
+            document.getElementById('bottomSection').innerHTML = contentHtml;
+
+            // Remove 'active' class from all items
+            const items = document.querySelectorAll('.itemCategory');
+            items.forEach(item => item.classList.remove('active'));
+
+            // Add 'active' class to the clicked item
+            element.classList.add('active');
+
+            // Render the chart with the filtered data
+            renderChart(filteredData);
+        }
+
+        // initially loop through the data and show the first category that is available
+        const categories = ['kids', 'normal', 'adults'];
+
+        for (let category of categories) {
+            const filteredData = data.filter(item => item.category === category);
+
+            console.log(filteredData);
+
+            if (filteredData.length !== 0) {
+                console.log('showing', category);
+
+                showContent(category, document.querySelector(`.itemCategory[onclick="showContent('${category}', this)"]`));
+
+                break;
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>
