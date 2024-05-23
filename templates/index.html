@@ -1,198 +1,167 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
 
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Kart Stats</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/index.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
 </head>
 
-<body>
+<body class="d-flex flex-column h-100" style="background-color: #161616; font-family: 'Poppins', sans-serif;">
+    <main class="flex-shrink-0">
+        
+        <header class="py-5" style="height: 500px; display: flex; align-items: center; justify-content: center;">
+            <div class="container px-5 pb-5">
+                <div class="row gx-5 align-items-center justify-content-center">
+                    <div class="col-xxl-5">
+                        <!-- Header text content-->
+                        <div class="text-center text-xxl-start">
+
+                            <div class="fs-3 fw-light text-muted">View your stats for</div>
+                            <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline" style="color: #DFDFDF;">GoKarting</span>
+                            </h1>
+                            <div
+                                class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
+                                <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder"
+                                    href="/search" style="margin-right: 10px;">Search for driver</a>
+                                <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder"
+                                    href="/dashboard" style="margin-left: 10px;">Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+        <!-- About Section-->
+        <section class="py-5" style="background-color: #1F1F1F; color: white;">
+            <div class="container px-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-xxl-8">
+                        <div class="text-center my-5">
+                            <h2 class="display-5 fw-bolder">
+                                <span class="text-gradient d-inline" style="color: #696969;">Leaderboards</span>
+                            </h2>
 
 
-    <main role="main">
-        {{ user_id }}
-        {{ user_email }}
-        <table>
-            <tr>
-                <th>
-                    Pos
-                </th>
-                <th>
-                    Driver
-                </th>
-                <th>
-                    Gap
-                </th>
-            </tr>
-        </table>
+                            <main class="laderboardsWrapper" role="main">
+                                <!-- Placeholder for leaderboards -->
+                                <div id="kids-leaderboard">
+                                    <div class="titleLeaderboard">Kids</div>
+                                </div>
+                                <div id="normal-leaderboard">
+                                    <div class="titleLeaderboard">Normal</div>
+                                </div>
+                                <div id="adults-leaderboard">
+                                    <div class="titleLeaderboard">Adults</div>
+                                </div>
+                            </main>
+
+                            <script src="https://d3js.org/d3.v6.min.js"></script>
+                            <script>
+                                const colors = {
+                                    mercedes: '#00D2BE',
+                                    ferrari: '#DC0000',
+                                    redBull: '#1E41FF',
+                                    renault: '#FFF500',
+                                    racingPoint: '#F596C8',
+                                    alfaRomeo: '#9B0000',
+                                    toroRosso: '#469BFF',
+                                    haas: '#BD9E57',
+                                    mclaren: '#FF8700',
+                                    williams: '#FFFFFF'
+                                };
+                        
+                                const colorKeys = Object.keys(colors);
+                                const getRandomColor = () => colors[colorKeys[Math.floor(Math.random() * colorKeys.length)]];
+                        
+                                const top_20_all = JSON.parse(`{{ top_20_all|tojson }}`);
+                                console.log(top_20_all);
+                        
+                                const createLeaderboard = (selector, data) => {
+                                    // target the table element in which to add one div for each driver
+                                    const main = d3
+                                        .select(selector)
+                                        .append('table')
+                                        .html('<tr><th>Pos</th><th>Driver</th><th>Gap</th></tr>');
+                        
+                                    // for each driver add one table row
+                                    const drivers = main
+                                        .selectAll('tr.driver')
+                                        .data(data)
+                                        .enter()
+                                        .append('tr')
+                                        .attr('class', 'driver');
+                        
+                                    // position using the index of the data points
+                                    drivers
+                                        .append('td')
+                                        .text((d, i) => i + 1)
+                                        .attr('class', 'position');
+                        
+                                    // name followed by the team
+                                    drivers
+                                        .append('td')
+                                        .html(({ participant }) => participant)
+                                        .attr('class', 'driver')
+                                        .style('border-left', () => `4px solid ${getRandomColor()}`);
+                        
+                                    // gap from the first driver
+                                    drivers
+                                        .append('td')
+                                        .attr('class', 'gap')
+                                        .append('span')
+                                        .text(({ gap }) => gap.toFixed(3) + 's');
+                                };
+                        
+                                createLeaderboard('#kids-leaderboard', top_20_all.find(c => c.category === 'kids').data);
+                                createLeaderboard('#normal-leaderboard', top_20_all.find(c => c.category === 'normal').data);
+                                createLeaderboard('#adults-leaderboard', top_20_all.find(c => c.category === 'adults').data);
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
+    <!-- Footer-->
+    <footer class="bg-white py-4 mt-auto">
+        <div class="container px-5">
+            <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                <div class="col-auto">
+                    <div class="small m-0">Copyright &copy; GoKarts 2023</div>
+                </div>
+                <div class="col-auto">
+                    <a class="small" href="#!">Privacy</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#!">Terms</a>
+                    <span class="mx-1">&middot;</span>
+                    <a class="small" href="#!">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 
-<script>
-    const colors = {
-        mercedes: '#00D2BE',
-        ferrari: '#DC0000',
-        redBull: '#1E41FF',
-        renault: '#FFF500',
-        racingPoint: '#F596C8',
-        alfaRomeo: '#9B0000',
-        toroRosso: '#469BFF',
-        haas: '#BD9E57',
-        mclaren: '#FF8700',
-        williams: '#FFFFFF'
-    }
-
-    // array describing the drivers, sorted by position and with a gap describing the distance from the leading driver
-    const leaderboard = [
-        {
-            name: 'Lewis Hamilton',
-            team: 'mercedes',
-            gap: 'Leader'
-        },
-        {
-            name: 'Valteri Bottas',
-            team: 'mercedes',
-            gap: '+6.552s'
-        },
-        {
-            name: 'Sebastian Vettel',
-            team: 'ferrari',
-            gap: '+13.744s'
-        },
-        {
-            name: 'Max Verstappen',
-            team: 'red bull',
-            gap: '+27.627s'
-        },
-        {
-            name: 'Charles Leclerc',
-            team: 'ferrari',
-            gap: '+31.627s'
-        },
-        {
-            name: 'Pierre Gasly',
-            team: 'red bull',
-            gap: '+89.307s'
-        },
-        {
-            name: 'Daniel Ricciardo',
-            team: 'renault',
-            gap: '+1 lap'
-        }, {
-            name: 'Sergio Perez',
-            team: 'racing point',
-            gap: '+1 lap'
-        },
-        {
-            name: 'Kimi Räikkönen',
-            team: 'alfa romeo',
-            gap: '+1 lap'
-        },
-        {
-            name: 'Alexander Albon',
-            team: 'toro rosso',
-            gap: '+1 lap'
-        },
-        {
-            name: 'Romain Grosjean',
-            team: 'haas',
-            gap: '+1 lap'
-        },
-        {
-            name: 'Lance Stroll',
-            team: 'racing point',
-            gap: '+1 lap'
-        },
-        {
-            name: 'Kevin Magnussen',
-            team: 'haas',
-            gap: '+1 lap'
-        },
-        {
-            name: 'Carlos Sainz',
-            team: 'mclaren',
-            gap: '+1 lap'
-        },
-        {
-            name: 'Antonio Giovinazzi',
-            team: 'alfa romeo',
-            gap: '+1 lap'
-        },
-        {
-            name: 'George Russell',
-            team: 'williams',
-            gap: '+2 laps'
-        },
-        {
-            name: 'Robert Kubica',
-            team: 'williams',
-            gap: '+2 laps'
-        },
-        {
-            name: 'Lando Norris',
-            team: 'mclaren',
-            gap: 'DNF'
-        },
-        {
-            name: 'Daniil Kvyat',
-            team: 'toro rosso',
-            gap: 'DNF'
-        },
-        {
-            name: 'Nico Hulkenberg',
-            team: 'renault',
-            gap: 'DNF'
-        }
-    ];
-
-    // target the table element in which to add one div for each driver
-    const main = d3
-        .select('table');
-
-    // for each driver add one table row
-    // ! add a class to the row to differentiate the rows from the existing one
-    // otherwise the select method would target the existing one and include one row less than the required amount
-    const drivers = main
-        .selectAll('tr.driver')
-        .data(leaderboard)
-        .enter()
-        .append('tr')
-        .attr('class', 'driver');
-
-    // in each row add the information specified by the dataset in td elements
-    // specify a class to style the elements differently with CSS
-
-    // position using the index of the data points
-    drivers
-        .append('td')
-        .text((d, i) => i + 1)
-        .attr('class', 'position');
-
-
-    // name followed by the team
-    drivers
-        .append('td')
-        // include the last name in a separate element to style it differently
-        // include the team also in another element for the same reason
-        .html(({ name, team }) => `${name.split(' ').map((part, index) => index > 0 ? `<strong>${part}</strong>` : `${part}`).join(' ')} <span>${team}</span>`)
-        // include a border with the color matching the team
-        .style('border-left', ({ team }) => {
-            // find the color using the string value found in d.team
-            // ! if the string value has a space, camelCase the value
-            const color = team.split(' ').map((word, index) => index > 0 ? `${word[0].toUpperCase()}${word.slice(1)}` : `${word}`).join('');
-            return `4px solid ${colors[color]}`;
-        })
-        .attr('class', 'driver');
-
-    // gap from the first driver
-    drivers
-        .append('td')
-        .attr('class', 'gap')
-        .append('span')
-        .text(({ gap }) => gap);
-</script>
+{% endblock %}
 
 </html>

@@ -16,15 +16,19 @@ apis = {
 }
 
 
-while True:
-    for category, api_url in apis.items():
-        records = fetch_data(api_url)
-        add_participants(records)
-        insert_records(records, category)
-        
-        time.sleep(60)
+records = fetch_data(apis["adults"])
+print(records)
 
-# for category, api_url in apis.items():
-#     records = fetch_data(api_url)
-#     add_participants(records)
-#     insert_records(records, category)
+
+# while True:
+#     for category, api_url in apis.items():
+#         records = fetch_data(api_url)
+#         add_participants(records)
+#         insert_records(records, category)
+        
+#         time.sleep(60)
+
+for category, api_url in apis.items():
+    records = fetch_data(api_url)
+    add_participants(records)
+    insert_records(records, category)

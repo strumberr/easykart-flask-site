@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from components.database import *
+# import component as db
+# todo: sdsd
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 import bcrypt
 from dotenv import load_dotenv
@@ -35,13 +37,12 @@ def load_user(user_id):
 
 
 @app.route("/")
-@login_required
 def index():
+    top_20_all = get_top_20_best_all_categories()
     
-    user_id = current_user.id
-    user_email = current_user.email
+    print(top_20_all)
     
-    return render_template("index.html", user_id=user_id, user_email=user_email)
+    return render_template("index.html", top_20_all=top_20_all)
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -107,6 +108,28 @@ def user():
     print(stats_username)
     
     return render_template("user.html", stats_username=stats_username, username=username)
+
+
+@app.route("/dashboard", methods=["GET"])
+@login_required
+def dashboard():
+    # get the username from the current user
+    user_email = current_user.email
+    username = database_handler.get_user_by_email(user_email)['username_easykart']
+    
+    print(username)
+    
+    # stats_username = get_all_stats_username(username)
+    
+    stats_username = detailedUserStats(username)
+    
+    print(stats_username)
+    
+    return render_template("dashboard.html", stats_username=stats_username, username=username)
+
+
+
+
 
 
 @app.route("/api/getBestScore", methods=["POST"])
