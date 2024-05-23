@@ -206,6 +206,43 @@ def detailedUserStats(username):
 
 
 
+def get_top_20_best_all_categories():
+    # get the top 20 best scores for all categories and return the position, participant, score and calculate the gaps between the scores
+    categories = ['kids', 'normal', 'adults']
+    top_20 = []
+    
+    for category in categories:
+        response = supabase.table('records').select('participant_id', 'score').eq('category', category).order('score').limit(20).execute()
+        category_data = {
+            'category': category,
+            'data': response.data
+        }
+        top_20.append(category_data)
+        
+    for category_data in top_20:
+        category_data['data'].sort(key=lambda x: x['score'])
+        for i, record in enumerate(category_data['data']):
+            if i == 0:
+                record['gap'] = 0
+                continue
+            record['gap'] = record['score'] - category_data['data'][i - 1]['score']
+        
+    # Convert participant_id to username
+    participant_ids = [record['participant_id'] for category_data in top_20 for record in category_data['data']]
+    response = supabase.table('participants').select('id', 'username').in_('id', participant_ids).execute()
+    participant_map = {participant['id']: participant['username'] for participant in response.data}
+    
+    for category_data in top_20:
+        for record in category_data['data']:
+            participant_id = record['participant_id']
+            if participant_id in participant_map:
+                record['participant'] = participant_map[participant_id]
+    return top_20
+
+
+
+
+
 class Users:
     def __init__(self):
         pass

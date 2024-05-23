@@ -1,15 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  </head>
-
-  <body>
-    <!-- loop through stats_username array -->
-    <ul>
-      {% for username in stats_username %}
-        <li>{{ username }}</li>
-      {% endfor %}
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoKart User Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>EasyKart User Dashboard</h1>
+        </header>
+        <section class="user-info">
+            <h2>User: {{ username }}</h2>
+        </section>
+        <section class="records">
+            <h3>Adult Records</h3>
+            {% for record in stats_username.all_records.adults %}
+                <div class="record-card">
+                    <p><strong>Date:</strong> {{ record.date }} ({{ record.day_of_week }})</p>
+                    <p><strong>Label:</strong> {{ record.label }}</p>
+                    <p><strong>Position:</strong> {{ record.position }}/{{ record.total_drivers }}</p>
+                    <p><strong>Score:</strong> {{ record.score }}</p>
+                    <p><strong>Percentage to Beat First:</strong> {{ record.percentage_to_beat_first }}%</p>
+                    <p><strong>Player Top Percentage:</strong> {{ record.player_top_percentage }}%</p>
+                    <p><strong>Seconds to Beat First:</strong> {{ record.seconds_to_beat_first }}</p>
+                </div>
+            {% endfor %}
+            <h3>Kids Records</h3>
+            {% if stats_username.all_records.kids %}
+                {% for record in stats_username.all_records.kids %}
+                    <div class="record-card">
+                        <p><strong>Date:</strong> {{ record.date }} ({{ record.day_of_week }})</p>
+                        <p><strong>Label:</strong> {{ record.label }}</p>
+                        <p><strong>Position:</strong> {{ record.position }}/{{ record.total_drivers }}</p>
+                        <p><strong>Score:</strong> {{ record.score }}</p>
+                        <p><strong>Percentage to Beat First:</strong> {{ record.percentage_to_beat_first }}%</p>
+                        <p><strong>Player Top Percentage:</strong> {{ record.player_top_percentage }}%</p>
+                        <p><strong>Seconds to Beat First:</strong> {{ record.seconds_to_beat_first }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No records available for kids.</p>
+            {% endif %}
+            <h3>Normal Records</h3>
+            {% for record in stats_username.all_records.normal %}
+                <div class="record-card">
+                    <p><strong>Date:</strong> {{ record.date }} ({{ record.day_of_week }})</p>
+                    <p><strong>Label:</strong> {{ record.label }}</p>
+                    <p><strong>Position:</strong> {{ record.position }}/{{ record.total_drivers }}</p>
+                    <p><strong>Score:</strong> {{ record.score }}</p>
+                    <p><strong>Percentage to Beat First:</strong> {{ record.percentage_to_beat_first }}%</p>
+                    <p><strong>Player Top Percentage:</strong> {{ record.player_top_percentage }}%</p>
+                    <p><strong>Seconds to Beat First:</strong> {{ record.seconds_to_beat_first }}</p>
+                </div>
+            {% endfor %}
+        </section>
+    </div>
+</body>
 </html>

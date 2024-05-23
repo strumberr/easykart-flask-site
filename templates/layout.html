@@ -1,21 +1,32 @@
-<!doctype html>
+<!-- app/templates/layout.html -->
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="{{ app_data['description'] }}">
-    <meta name="keywords" content="{{ app_data['keywords'] }}">
-    <meta name="author" content="{{ app_data['author'] }}">
 
-    <title>{{ app_data['html_title'] }}</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Layout{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
 
-  <body>
+<body>
+  <nav class="navbar navbar-expand-lg py-3" style="background-color: #1F1F1F;">
+    <div class="container px-5">
+      <a class="navbar-brand" href="/"><span class="fw-bolder text-primary">Home</span></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+          class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
 
-    <!-- {% include 'includes/_navbar.html' %} -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
 
-    <main role="main" class="container">
-      
-    </main>
-  </body>
 </html>
