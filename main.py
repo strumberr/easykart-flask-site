@@ -40,9 +40,11 @@ def load_user(user_id):
 def index():
     top_20_all = get_top_20_best_all_categories()
     
-    print(top_20_all)
+    total_driver_records = get_total_drivers_and_records()
     
-    return render_template("index.html", top_20_all=top_20_all)
+    print(total_driver_records)
+    
+    return render_template("index.html", top_20_all=top_20_all, total_driver_records=total_driver_records)
 
 
 @app.route("/signup", methods=["GET", "POST"])

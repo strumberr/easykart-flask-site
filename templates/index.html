@@ -141,6 +141,40 @@
                                 createLeaderboard('#adults-leaderboard', top_20_all.find(c => c.category === 'adults').data);
                             </script>
                         </div>
+
+                        <div class="text-center my-5">
+                            <h2 class="display-5 fw-bolder">
+                                <span class="text-gradient d-inline" style="color: #696969;">Our numbers</span>
+                            </h2>
+
+                            <!-- in big white text, 2 containers with equal distance in between horizontally -->
+                            <div class="d-grid gap d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h1 class="display-1 fw-bolder mb-5"><span class="text-gradient d-inline"
+                                                    style="color: #DFDFDF;">{{ total_driver_records[0] }}</span>
+                                            </h1>
+
+                                            <div class="fs-3 fw-light text-muted">Total drivers</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Second container -->
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h1 class="display-1 fw-bolder mb-5"><span class="text-gradient d-inline"
+                                                    style="color: #DFDFDF;">{{ total_driver_records[1] }}</span>
+                                            </h1>
+
+                                            <div class="fs-3 fw-light text-muted">Total records</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>

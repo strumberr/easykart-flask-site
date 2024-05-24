@@ -242,6 +242,21 @@ def get_top_20_best_all_categories():
 
 
 
+# get the total number of drivers for each category, and then a total number of drivers for all categories together. And then the total number of records for all categories together.
+def get_total_drivers_and_records():
+    categories = ['kids', 'normal', 'adults']
+    total_drivers = 0
+    total_records = 0
+    
+    for category in categories:
+        response = supabase.table('records').select('participant_id').eq('category', category).execute()
+        total_drivers += len(set(record['participant_id'] for record in response.data))
+        total_records += len(response.data)
+    
+    return total_drivers, total_records
+
+
+
 
 class Users:
     def __init__(self):
