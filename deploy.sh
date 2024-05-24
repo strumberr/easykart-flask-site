@@ -13,3 +13,7 @@ git pull git@github.com:strumberr/easykart-flask-site.git main
 
 # Install any new dependencies
 pip3 install -r requirements.txt
+
+sudo systemctl daemon-reload
+sudo systemctl start easykart-flask
+sudo systemctl status easykart-flask

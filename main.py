@@ -129,6 +129,11 @@ def dashboard():
 
 
 
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 
 
@@ -178,6 +183,7 @@ def all_usernames():
 
         
     return {"stats": data}
+
 
 
 
