@@ -1,78 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Sign Up</title>
+    <title>Login and Sign Up</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+        *,
+        *::after,
+        *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            width: 100%;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            font-family: sans-serif;
+            background: #161616;
+            font-family: 'Poppins', sans-serif;
         }
-        .container {
-            background: white;
-            padding: 20px 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        h2 {
+
+        .box {
+            background: #191919;
             text-align: center;
-            margin-bottom: 20px;
+            width: 400px;
+            margin: 10px;
+            padding: 40px;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input[type="email"], input[type="password"], input[type="name"], input[type="text"] {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        button {
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
+
+        .box h1,
+        .box h2 {
             color: white;
-            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .box input[type="text"],
+        .box input[type="password"],
+        .box input[type="email"],
+        .box input[type="name"] {
+            width: 80%;
+            margin: 10px auto;
+            padding: 14px 10px;
+            background: none;
+            color: white;
+            border: 1px solid #03DAC6;
+            border-radius: 24px;
+            text-align: center;
+            transition: 0.25s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .box input[type="text"]:focus,
+        .box input[type="password"]:focus,
+        .box input[type="email"]:focus,
+        .box input[type="name"]:focus {
+            width: 100%;
+            border-color: #FFB800;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .box input[type="submit"],
+        .box button {
+            margin: 10px;
+            padding: 14px 40px;
+            background: none;
+            color: white;
+            border: 1px solid #FFB800;
+            border-radius: 24px;
+            transition: 0.25s;
             cursor: pointer;
-            margin-top: 10px;
+            text-transform: uppercase;
+            font-family: 'Poppins', sans-serif;
         }
-        button:hover {
-            background-color: #0056b3;
+
+        .box input[type="submit"]:hover,
+        .box button:hover {
+            background: #FFB800;
+            font-family: 'Poppins', sans-serif;
         }
+
         .dropdown {
             border: 1px solid #ccc;
             max-height: 150px;
             overflow-y: auto;
             position: absolute;
             z-index: 1000;
-            background: white;
-            width: calc(100% - 40px);
-            margin-left: 20px;
-            border-radius: 4px;
+            background: #1F1F1F;
+            width: calc(20% - 40px);
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 10px;
+            border-radius: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: none;
+            font-family: 'Poppins', sans-serif;
         }
+
         .dropdown div {
             padding: 10px;
             cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            color: #DFDFDF;
         }
+
         .dropdown div:hover {
             background: #f1f1f1;
+            font-family: 'Poppins', sans-serif;
+            color: #161616;
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
+    <div class="box">
         <h2>Sign Up</h2>
         <form method="POST">
             <input type="email" name="email" placeholder="Email" required>
@@ -82,27 +138,28 @@
             <div id="easykart_username_dropdown" class="dropdown"></div>
             <button type="submit">Sign Up</button>
         </form>
+        <a style="color: white;" href="/login">Already have an account? Log in here</a>
     </div>
     <script>
-        $(document).ready(function() {
-            $('#easykart_username').on('input', function() {
+        $(document).ready(function () {
+            $('#easykart_username').on('input', function () {
                 let query = $(this).val();
                 if (query.length > 0) {
                     $.ajax({
                         url: '/api/easykart_username_search',
                         type: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify({ 
+                        data: JSON.stringify({
                             username: query
                         }),
-                        success: function(response) {
+                        success: function (response) {
                             let dropdown = $('#easykart_username_dropdown');
                             dropdown.empty().show();
-                            response.stats.forEach(function(user) {
+                            response.stats.forEach(function (user) {
                                 dropdown.append('<div>' + user + '</div>');
                             });
                         },
-                        error: function(error) {
+                        error: function (error) {
                             console.error('Error:', error);
                         }
                     });
@@ -111,17 +168,18 @@
                 }
             });
 
-            $(document).on('click', '#easykart_username_dropdown div', function() {
+            $(document).on('click', '#easykart_username_dropdown div', function () {
                 $('#easykart_username').val($(this).text());
                 $('#easykart_username_dropdown').hide();
             });
         });
 
-        $(document).click(function(event) {
+        $(document).click(function (event) {
             if (!$(event.target).closest('#easykart_username, #easykart_username_dropdown').length) {
                 $('#easykart_username_dropdown').hide();
             }
         });
     </script>
 </body>
+
 </html>

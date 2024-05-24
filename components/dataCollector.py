@@ -25,9 +25,11 @@ def job():
         insert_records(records, category)
 
 
-schedule.every(12).hours.do(job)
+# schedule.every(12).hours.do(job)
 
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
+# while 1:
+#     schedule.run_pending()
+#     time.sleep(1)
 
+
+job()
