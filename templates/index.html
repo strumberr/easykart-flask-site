@@ -25,7 +25,7 @@
 
 <body class="d-flex flex-column h-100" style="background-color: #161616; font-family: 'Poppins', sans-serif;">
     <main class="flex-shrink-0">
-        
+
         <header class="py-5" style="height: 500px; display: flex; align-items: center; justify-content: center;">
             <div class="container px-5 pb-5">
                 <div class="row gx-5 align-items-center justify-content-center">
@@ -34,14 +34,15 @@
                         <div class="text-center text-xxl-start">
 
                             <div class="fs-3 fw-light text-muted">View your stats for</div>
-                            <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline" style="color: #DFDFDF;">GoKarting</span>
+                            <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline"
+                                    style="color: #DFDFDF;">GoKarting</span>
                             </h1>
                             <div
                                 class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                                <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder"
-                                    href="/search" style="margin-right: 10px;">Search for driver</a>
-                                <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder"
-                                    href="/dashboard" style="margin-left: 10px;">Dashboard</a>
+                                <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="/search"
+                                    style="margin-right: 10px;">Search for driver</a>
+                                <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="/dashboard"
+                                    style="margin-left: 10px;">Dashboard</a>
                             </div>
                         </div>
                     </div>
@@ -87,41 +88,44 @@
                                     mclaren: '#FF8700',
                                     williams: '#FFFFFF'
                                 };
-                        
+
                                 const colorKeys = Object.keys(colors);
                                 const getRandomColor = () => colors[colorKeys[Math.floor(Math.random() * colorKeys.length)]];
-                        
+
                                 const top_20_all = JSON.parse(`{{ top_20_all|tojson }}`);
                                 console.log(top_20_all);
-                        
+
                                 const createLeaderboard = (selector, data) => {
                                     // target the table element in which to add one div for each driver
                                     const main = d3
                                         .select(selector)
                                         .append('table')
                                         .html('<tr><th>Pos</th><th>Driver</th><th>Gap</th></tr>');
-                        
+
                                     // for each driver add one table row
                                     const drivers = main
                                         .selectAll('tr.driver')
                                         .data(data)
                                         .enter()
                                         .append('tr')
-                                        .attr('class', 'driver');
-                        
+                                        .attr('class', 'driver')
+                                        .on("click", function (event, d) {
+                                            window.location.href = `/user?username=${d.participant}`;
+                                        });
+
                                     // position using the index of the data points
                                     drivers
                                         .append('td')
                                         .text((d, i) => i + 1)
                                         .attr('class', 'position');
-                        
+
                                     // name followed by the team
                                     drivers
                                         .append('td')
-                                        .html(({ participant }) => participant)
+                                        .text(({ participant }) => participant)
                                         .attr('class', 'driver')
                                         .style('border-left', () => `4px solid ${getRandomColor()}`);
-                        
+
                                     // gap from the first driver
                                     drivers
                                         .append('td')
@@ -129,7 +133,9 @@
                                         .append('span')
                                         .text(({ gap }) => gap.toFixed(3) + 's');
                                 };
-                        
+
+
+
                                 createLeaderboard('#kids-leaderboard', top_20_all.find(c => c.category === 'kids').data);
                                 createLeaderboard('#normal-leaderboard', top_20_all.find(c => c.category === 'normal').data);
                                 createLeaderboard('#adults-leaderboard', top_20_all.find(c => c.category === 'adults').data);
